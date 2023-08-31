@@ -19,10 +19,8 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
 
   void answerHandler(String value) {
     setState(() {
-      if (currentQuestionIndex < questions.length - 1) {
-        widget.addAnswer(value);
-        currentQuestionIndex += 1;
-      }
+      currentQuestionIndex += 1;
+      widget.addAnswer(value);
     });
   }
 
@@ -48,7 +46,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
           return QuestionButton(
               buttonText: e,
               onTap: () {
-                answerHandler(e);
+                answerHandler(e.toString());
               });
         })
       ],

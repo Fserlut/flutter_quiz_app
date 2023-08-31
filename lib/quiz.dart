@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:second_app/questions_screen.dart';
-
+import 'package:second_app/result_screen.dart';
 import 'package:second_app/start_screen.dart';
+
+import 'package:second_app/data/questions.dart';
 
 class Quiz extends StatefulWidget {
   const Quiz({super.key});
@@ -14,6 +16,7 @@ class Quiz extends StatefulWidget {
 
 class _QuizState extends State<Quiz> {
   String? activeScreen;
+  List<String> answers = [];
 
   void changeScreen() {
     setState(() {
@@ -21,17 +24,46 @@ class _QuizState extends State<Quiz> {
     });
   }
 
+  // Убого выглядит тип тут, но я пока не знаю как тут делают
+  // интерфейсы, да и вообще есть они тут :)
+  List<Map<String, Object>> getSummaryData() {
+    final List<Map<String, Object>> res = [];
+
+    for (var i = 0; i < answers.length; i++) {
+      res.add({
+        'question_index': i,
+        'question': questions[i].text,
+        'correct_answer': questions[i].answers[0],
+        'user_answer': answers[i],
+      });
+    }
+
+    return res;
+  }
+
   @override
   Widget build(BuildContext context) {
-    Widget activeWidget = StartScreen(changeScreen);
-    final List<String> answers = [];
+    Widget activeWidget = StartScreen(() {
+      answers = [];
+      changeScreen();
+    });
 
     void addAnswer(String answer) {
       answers.add(answer);
+
+      if (answers.length == questions.length) {
+        setState(() {
+          activeScreen = 'result-screen';
+        });
+      }
     }
 
     if (activeScreen == 'questions-screen') {
       activeWidget = QuestionsScreen(addAnswer);
+    }
+
+    if (activeScreen == 'result-screen') {
+      activeWidget = ResultScreen(getSummaryData());
     }
 
     return MaterialApp(
@@ -48,8 +80,9 @@ class _QuizState extends State<Quiz> {
             ),
           ),
           child: Container(
-              margin: const EdgeInsets.all(40),
-              child: Center(child: activeWidget)),
+            margin: const EdgeInsets.all(40),
+            child: Center(child: activeWidget),
+          ),
         ),
       ),
     );
