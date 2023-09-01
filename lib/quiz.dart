@@ -58,12 +58,22 @@ class _QuizState extends State<Quiz> {
       }
     }
 
+    void restartQuiz() {
+      setState(() {
+        answers = [];
+        activeScreen = 'start-screen';
+      });
+    }
+
     if (activeScreen == 'questions-screen') {
       activeWidget = QuestionsScreen(addAnswer);
     }
 
     if (activeScreen == 'result-screen') {
-      activeWidget = ResultScreen(getSummaryData());
+      activeWidget = ResultScreen(
+        summaryData: getSummaryData(),
+        restartQuiz: restartQuiz,
+      );
     }
 
     return MaterialApp(
