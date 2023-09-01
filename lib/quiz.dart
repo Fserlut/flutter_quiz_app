@@ -26,7 +26,7 @@ class _QuizState extends State<Quiz> {
 
   // Убого выглядит тип тут, но я пока не знаю как тут делают
   // интерфейсы, да и вообще есть они тут :)
-  List<Map<String, Object>> getSummaryData() {
+  List<Map<String, Object>> get summaryData {
     final List<Map<String, Object>> res = [];
 
     for (var i = 0; i < answers.length; i++) {
@@ -71,7 +71,7 @@ class _QuizState extends State<Quiz> {
 
     if (activeScreen == 'result-screen') {
       activeWidget = ResultScreen(
-        summaryData: getSummaryData(),
+        summaryData: summaryData,
         restartQuiz: restartQuiz,
       );
     }
